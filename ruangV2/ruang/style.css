@@ -1,0 +1,670 @@
+/* ==========================================================================
+   1. GLOBAL VARIABLES & BASE STYLES
+   ========================================================================== */
+:root {
+  /* Brand color palette and surface tokens */
+  --primary: #246b59;   /* Primary forest green */
+  --hover: #1b5345;     /* Darker green for hover states */
+  --ink: #1f2a27;       /* Dark charcoal for body typography */
+  --muted: #64746f;     /* Muted grey-green for secondary text */
+  --line: #e2e8e5;      /* Border and divider line color */
+  --soft: #f4f7f5;      /* Light background surface tint */
+  --white: #ffffff;     /* Pure white card backgrounds */
+  --danger: #d93838;    /* Warning/destructive action red */
+}
+
+/* Include padding and border in all element dimensions */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Inherit typography on form controls */
+button, input, select, textarea {
+  font: inherit;
+}
+
+/* Disable double-tap to zoom delays on interactive elements */
+button, a {
+  touch-action: manipulation;
+}
+
+button {
+  cursor: pointer;
+  color: inherit;
+  background: none;
+  border: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 40px;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: 26px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+p {
+  color: var(--muted);
+}
+
+small {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+strong {
+  font-weight: 600;
+}
+
+main {
+  min-height: 65vh;
+}
+
+/* ==========================================================================
+   2. FORMS & INPUT CONTROLS
+   ========================================================================== */
+input, select, textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--white);
+  padding: 10px 12px;
+  color: var(--ink);
+  min-height: 42px;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+form > label, form > .two-fields {
+  margin-bottom: 16px;
+}
+
+/* Two-column side-by-side layout for form fields */
+.two-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   3. BUTTONS, BADGES & AVATARS
+   ========================================================================== */
+/* Primary filled button */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--primary);
+  color: var(--white);
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 7px;
+  min-height: 42px;
+  border: 1px solid transparent;
+}
+
+.button:hover {
+  background: var(--hover);
+  color: white;
+}
+
+/* Secondary outlined button */
+.button.secondary {
+  background: var(--white);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.button.secondary:hover {
+  background: var(--soft);
+}
+
+/* Compact button for table rows and card action strips */
+.small-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  border-radius: 5px;
+  background: white;
+  min-height: 30px;
+}
+
+.small-button:hover {
+  background: var(--soft);
+}
+
+/* Circular user initial avatar badge */
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--soft);
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+}
+
+/* Status indicator badge tags */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Color schemes mapped to lifecycle statuses */
+.badge.pending { background: #fef3c7; color: #92400e; }
+.badge.confirmed, .badge.active, .badge.enabled { background: #d1fae5; color: #065f46; }
+.badge.cancelled, .badge.disabled { background: #fee2e2; color: #991b1b; }
+.badge.completed { background: #e0e7ff; color: #3730a3; }
+
+/* ==========================================================================
+   4. NAVIGATION & HEADER
+   ========================================================================== */
+/* Keyboard accessibility skip link */
+.skip-link {
+  position: fixed;
+  top: -60px;
+  left: 10px;
+  background: var(--white);
+  padding: 12px;
+  z-index: 30;
+}
+.skip-link:focus { top: 5px; }
+
+/* Top demo role indicator banner */
+.demo-strip {
+  background: var(--primary);
+  color: var(--white);
+  font-size: 12px;
+  text-align: center;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.demo-strip a {
+  text-decoration: underline;
+  color: white;
+}
+
+/* Main header flex container */
+.nav-wrap {
+  height: 80px;
+  max-width: 1300px;
+  margin: auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+#main-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+#main-nav a.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   5. HERO BANNER & HOMESTAY CARDS
+   ========================================================================== */
+.hero {
+  height: 480px;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.hero-image {
+  height: 100%;
+  object-position: center;
+  transition: opacity 0.35s ease-in-out;
+}
+
+/* Dark gradient overlay to preserve hero text contrast */
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(20,40,35,0.78), rgba(20,40,35,0.28) 70%, transparent);
+}
+
+.hero-copy {
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  color: white;
+  max-width: 600px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin: 16px 0;
+  color: white;
+}
+
+.hero p { color: #f5f5f5; }
+
+.hero-link {
+  margin-top: 22px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: white;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255,255,255,0.6);
+  padding-bottom: 4px;
+}
+
+/* Common max-width wrapper for major page views */
+.home-section, .page-heading, .explore-layout, .detail-page, .bookings-page {
+  max-width: 1200px;
+  margin: 50px auto 0;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.eyebrow {
+  display: block;
+  color: var(--primary);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+/* 4-column responsive homestay card grid */
+.stay-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.stay-photo {
+  display: block;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 195px;
+}
+
+.stay-photo img {
+  height: 100%;
+  transition: transform 0.3s;
+}
+
+.stay-photo:hover img { transform: scale(1.03); }
+
+/* Property category badge overlay on card thumbnail */
+.photo-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 11px;
+  background: rgba(255,255,255,0.95);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.stay-card h3 {
+  font-size: 18px;
+  margin: 10px 0 6px;
+}
+
+.stay-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  margin-top: 12px;
+  gap: 12px;
+}
+
+.daily-rate {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.daily-rate-note {
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.stay-bottom > .button {
+  flex-shrink: 0;
+}
+
+.stay-bottom strong {
+  font-size: 16px;
+  color: var(--primary);
+}
+
+/* ==========================================================================
+   6. EXPLORE & DETAIL LAYOUTS
+   ========================================================================== */
+.explore-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 30px;
+}
+
+.filter-panel {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px;
+  align-self: start;
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 50px;
+  margin-top: 30px;
+}
+
+.reservation-panel {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  align-self: start;
+}
+
+.reserve-price strong {
+  font-size: 26px;
+  color: var(--primary);
+}
+
+.price-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin: 12px 0;
+}
+
+.price-line.total {
+  border-top: 1px solid var(--line);
+  padding-top: 15px;
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   7. DASHBOARDS & TABLES
+   ========================================================================== */
+.table-wrap {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  font-size: 13px;
+}
+
+th {
+  background: var(--soft);
+  color: var(--muted);
+  font-weight: 600;
+  padding: 12px 16px;
+}
+
+td {
+  padding: 14px 16px;
+  border-top: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+/* Dashboard wrapper with fixed-width sidebar and expanding main content */
+.dashboard-shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  max-width: 1300px;
+  margin: auto;
+  border-top: 1px solid var(--line);
+  min-height: 650px;
+}
+
+.sidebar {
+  padding: 25px 18px;
+  background: var(--soft);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 10px 12px;
+  border-radius: 7px;
+}
+
+.sidebar a.active {
+  background: white;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.dashboard-main {
+  padding: 30px 35px;
+}
+
+/* 3-card metric aggregate row */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.stat {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.stat strong {
+  font-size: 26px;
+  display: block;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   8. FOOTER, TOAST & DIALOG
+   ========================================================================== */
+footer {
+  border-top: 1px solid var(--line);
+  padding: 35px 0 20px;
+  margin-top: 60px;
+  background: var(--soft);
+}
+
+.date-price-search {
+  max-width: 1200px;
+  margin: 0 auto 28px;
+  padding: 0 16px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.date-price-search h2 { font-size: 20px; margin-bottom: 6px; }
+.date-price-search p { font-size: 13px; color: var(--ink); }
+.date-price-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin: 16px 0 12px; }
+.date-price-form label { margin: 0; flex: 0 1 260px; }
+.date-price-form input { width: 100%; }
+.date-shortcuts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.date-shortcuts .button { font-size: 13px; min-height: 36px; padding: 6px 14px; }
+
+.footer-main, .footer-bottom {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-bottom {
+  font-size: 11px;
+  margin-top: 22px;
+  border-top: 1px solid var(--line);
+  padding-top: 15px;
+}
+
+/* Floating snackbar/toast notification element */
+#toast {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  background: var(--ink);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  z-index: 50;
+  transition: 0.2s;
+}
+
+#toast.visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/* Native HTML5 <dialog> modal styling */
+dialog {
+  border: 0;
+  border-radius: 12px;
+  padding: 25px;
+  max-width: 550px;
+  width: 90%;
+  box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+}
+
+dialog::backdrop {
+  background: rgba(0,0,0,0.5);
+}
+
+.dialog-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+/* ==========================================================================
+   9. MEDIA QUERIES & PRINT STYLES
+   ========================================================================== */
+/* Responsive adjustments for tablet and mobile viewports */
+@media (max-width: 900px) {
+  .stay-grid { grid-template-columns: 1fr 1fr; }
+  .explore-layout, .detail-layout, .dashboard-shell { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+}
+
+/* Clean Print & PDF generation styles (hides navigational chrome) */
+@media print {
+  #header, #footer, .sidebar, .button, .demo-strip, #toast, .small-button, #admin-report-actions {
+    display: none !important;
+  }
+  .dashboard-shell {
+    display: block !important;
+    border: none !important;
+  }
+  .dashboard-main { padding: 0 !important; }
+  body { background: white !important; color: black !important; }
+  .table-wrap { border: 1px solid #ccc !important; }
+}

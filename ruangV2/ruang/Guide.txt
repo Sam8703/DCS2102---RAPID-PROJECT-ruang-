@@ -1,0 +1,144 @@
+========================================================================
+       RUANG HOMESTAY - COMPLETE SETUP & RUN GUIDE (STEP BY STEP)
+========================================================================
+
+Follow these exact steps to set up the project folder, initialize MySQL,
+and run the application on your local XAMPP environment.
+
+------------------------------------------------------------------------
+STEP 1: ORGANIZE PROJECT FOLDERS & FILES IN XAMPP HTDOCS
+------------------------------------------------------------------------
+1. Open File Explorer on Windows.
+2. Navigate to your XAMPP web root directory:
+   C:\xampp\htdocs\
+3. Create a folder named:
+   ruang
+4. Inside C:\xampp\htdocs\ruang\, create an "images" subfolder.
+5. Place all your project files in the exact structure below:
+
+   C:\xampp\htdocs\ruang\
+   ├── index.html           (Frontend structure & template views)
+   ├── style.css            (Site styling & printable report rules)
+   ├── app.js               (Single-page router, analytics, and gallery logic)
+   ├── db.php               (MySQLi database connection)
+   ├── api.php              (Backend API endpoints & JSON response handler)
+   ├── ruang_db.sql         (Fresh database creation script above)
+   └── images/
+       ├── favicon.png      (Browser tab icon)
+       ├── PalmHouse.jpg    (Palm House main)
+       ├── PalmHouseK.jpg   (Palm House kitchen/interior)
+       ├── PalmHouseL.jpg   (Palm House living area)
+       ├── PalmHouseP.jpg   (Palm House pool/patio)
+       ├── PalmHouseR.jpg   (Palm House rooms)
+       ├── CityLoft.jpg     (City Loft main)
+       ├── CityLoftK.jpg    (City Loft kitchen)
+       ├── CityLoftL.jpg    (City Loft living area)
+       ├── CityLoftR.jpg    (City Loft room/skyline)
+       ├── SereneHome.jpg   (Serene Home main)
+       ├── SereneHomeB.jpg  (Serene Home balcony/courtyard)
+       ├── SereneHomeK.jpg  (Serene Home kitchen)
+       ├── SereneHomeL.jpg  (Serene Home living)
+       ├── SereneHomeR.jpg  (Serene Home room)
+       ├── HillsideCabin.jpg  (Hillside Cabin main)
+       ├── HillsideCabinK.jpg (Hillside Cabin kitchen)
+       ├── HillsideCabinR.jpg (Hillside Cabin room)
+       └── HillsideCabinV.jpg (Hillside Cabin view)
+
+
+------------------------------------------------------------------------
+STEP 2: START APACHE & MYSQL IN XAMPP
+------------------------------------------------------------------------
+1. Launch the XAMPP Control Panel from your Start Menu or Desktop.
+2. Locate "Apache" and click "Start" (the label background turns green).
+3. Locate "MySQL" and click "Start" (the label background turns green).
+
+
+------------------------------------------------------------------------
+STEP 3: INITIALIZE THE DATABASE IN PHPMYADMIN
+------------------------------------------------------------------------
+1. Open your web browser (Chrome, Edge, Firefox).
+2. Go to:
+   http://localhost/phpmyadmin
+3. Click the "SQL" tab in the top navigation bar.
+4. Copy the entire SQL query from above (or open ruang_db.sql in 
+   Notepad, select all, and copy).
+5. Paste the text into the phpMyAdmin SQL query box.
+6. Click the "Go" button at the bottom-right.
+7. Confirm that "ruang_db" appears in the left database tree with 
+   3 tables:
+   - users       (Admin, Owner, Customer records)
+   - homestays   (4 properties with image paths & Air conditioning)
+   - bookings    (Active reservations with customer contact details)
+
+
+------------------------------------------------------------------------
+STEP 4: RUN AND TEST THE APPLICATION
+------------------------------------------------------------------------
+Open a new browser tab and navigate to:
+http://localhost/ruang/index.html
+(or http://localhost/ruang/)
+
+Press [Ctrl + F5] once to perform a hard refresh and load new assets.
+
+
+------------------------------------------------------------------------
+STEP 5: VERIFY KEY FEATURES & ROLE WORKFLOWS
+------------------------------------------------------------------------
+
+1. Homepage Auto-Rotating Banner:
+   - Stay on the Home tab for 4 seconds without clicking anything.
+   - The hero background image automatically cycles through the 4 
+     properties (Palm House, City Loft, Serene Home, Hillside Cabin).
+
+2. Interactive Multi-Image Gallery & Live Price Calculation:
+   - Click "Explore" in the top navigation bar.
+   - Click "View stay" on "Palm House".
+   - Notice the clickable image thumbnails below the main photo.
+   - Click each thumbnail: the main photo smoothly transitions to display 
+     the exterior, pool, kitchen, and interior rooms.
+   - Change check-in and check-out dates: the "Estimated Total" live-calculates 
+     (nights x price per night).
+
+3. Customer Booking (Direct to MySQL):
+   - Fill in your Name, Email, and Phone Number in the reservation panel.
+   - Click "Confirm & Book".
+   - The booking is inserted into MySQL, and you are redirected to the 
+     "My Bookings" page with your reference code.
+
+4. Room Owner / Manager Portal (Editing Property & Viewing Guests):
+   - Click "Switch Role" in the top bar.
+   - Click "Switch" next to Daniel Tan (Owner).
+   - Click "Manager Portal" in the navigation bar.
+   - Click "My Homestays (Edit)":
+     * Click "Edit Details" on Palm House.
+     * Change the price or description and click "Save Changes to Database".
+     * The record updates directly in MySQL.
+   - Click "Customer Bookings":
+     * View guest names, contact phone numbers, dates, and update statuses 
+       (e.g., mark as "Confirmed").
+
+5. Admin Location Analytics & One-Click Reports:
+   - Click "Switch Role" -> Switch to Amira Hassan (Admin).
+   - Click "Admin Portal" in the top bar.
+   - View real-time aggregated metrics: Total Platform Bookings, Revenue, 
+     and the Top Destination.
+   - Destination breakdown table shows homestays available, bookings, 
+     guest count, revenue, and market share percentages per city.
+   - Click "Download CSV Report": downloads a ready-to-use Excel file.
+   - Click "Print / PDF": opens a clean, print-formatted page with 
+     headers and sidebars automatically hidden.
+
+
+------------------------------------------------------------------------
+TROUBLESHOOTING CHECKLIST
+------------------------------------------------------------------------
+- Images show broken icon?
+  Verify that your folder name is exactly "images" (lowercase) inside 
+  C:\xampp\htdocs\ruang\ and that filenames match capitalization exactly 
+  (e.g., PalmHouse.jpg).
+- Database connection error?
+  Ensure MySQL is running in XAMPP (green label) and that db.php has:
+  $username = "root"; and $password = "";
+- Changes not showing up?
+  Press [Ctrl + F5] in your browser to clear cached JavaScript and CSS.
+========================================================================

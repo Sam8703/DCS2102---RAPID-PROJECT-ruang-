@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- Ensure responsive viewport scaling on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ruang · Homestay Booking System</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" href="images/icon.png" />
+    <!-- Main project stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Accessibility skip link for keyboard navigation -->
+    <a class="skip-link" href="#app">Skip to content</a>
+
+    <!-- ==========================================
+         TOP HEADER & NAVIGATION
+         ========================================== -->
+    <header id="header">
+      <!-- Session info banner showing active role and quick switch link -->
+      <div class="demo-strip">
+        <span id="session-status-text">Loading session...</span>
+        <a href="#login" style="margin-left: 12px; color: white;">Switch Role</a>
+      </div>
+
+      <!-- Main brand logo and navigation bar -->
+      <div class="nav-wrap">
+        <a class="brand" href="#home">ruang.</a>
+        <nav id="main-nav">
+          <a id="nav-home" href="#home">Home</a>
+          <a id="nav-explore" href="#explore">Explore</a>
+          <a id="nav-bookings" href="#bookings">My Bookings</a>
+
+          <!-- Role-based portal links (toggled dynamically by app.js based on user role) -->
+          <a id="nav-owner" href="#owner" style="display: none;">Manager Portal</a>
+          <a id="nav-admin" href="#admin" style="display: none;">Admin Portal</a>
+
+          <!-- Active user profile avatar and logout button -->
+          <div id="nav-user-area" style="display: flex; align-items: center; gap: 8px;">
+            <span class="avatar" id="user-avatar">?</span>
+            <button class="small-button" style="color: var(--danger);" onclick="logout()">Log Out</button>
+          </div>
+          <!-- Login button (shown only when logged out) -->
+          <a id="nav-login-btn" class="button" style="min-height: 34px; padding: 6px 14px; display: none;" href="#login">Log In</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         MAIN APPLICATION VIEWS (SINGLE-PAGE APP)
+         ========================================== -->
+    <main id="app" tabindex="-1">
+
+      <!-- 1. HOME VIEW: Hero section with image carousel and featured homestays -->
+      <section id="view-home" class="page-view">
+        <!-- Hero banner with auto-rotating images handled in app.js -->
+        <div class="hero">
+          <img id="hero-carousel-img" class="hero-image" src="images/PalmHouse.jpg" alt="Hero Cover">
+          <div class="hero-shade"></div>
+          <div class="hero-copy">
+            <span class="eyebrow" style="color: #b2e2d5;">FEEL AT HOME, SOMEWHERE NEW</span>
+            <h1>Good days start<br>with a great stay.</h1>
+            <p>Discover handpicked homestays across Malaysia.<br>A change of scenery. A space of your own.</p>
+            <a class="hero-link" href="#explore">Find your kind of getaway →</a>
+          </div>
+        </div>
+
+        <!-- Featured stays grid rendered via JavaScript -->
+        <div class="home-section">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">FEATURED STAYS</span>
+              <h2>Somewhere you’ll love.</h2>
+            </div>
+            <a href="#explore" style="color: var(--primary); font-weight: 600;">Explore all stays →</a>
+          </div>
+          <div id="home-stay-grid" class="stay-grid"></div>
+        </div>
+      </section>
+
+      <!-- 2. EXPLORE VIEW: Search and filter homestays by city -->
+      <section id="view-explore" class="page-view" hidden>
+        <div class="page-heading">
+          <h1>Find your next happy place.</h1>
+          <p>Room to unwind. Places to discover.</p>
+        </div>
+        <div class="explore-layout">
+          <!-- City destination filter dropdown -->
+          <aside class="filter-panel">
+            <h3>Filter by Destination</h3>
+            <select id="explore-filter-select" style="margin-top: 10px;">
+              <option value="">All Malaysia</option>
+              <option value="Melaka">Melaka</option>
+              <option value="Kuala Lumpur">Kuala Lumpur</option>
+              <option value="Penang">Penang</option>
+              <option value="Ipoh">Ipoh</option>
+            </select>
+          </aside>
+          <!-- Listings container populated by app.js -->
+          <div>
+            <p style="margin-bottom: 15px;">Showing <strong id="explore-count">0 homestays</strong></p>
+            <div id="explore-stay-grid" class="stay-grid" style="grid-template-columns: repeat(3, 1fr);"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. DETAILS & REAL-TIME BOOKING VIEW: Photo gallery, amenities, & booking calculation form -->
+      <section id="view-details" class="page-view" hidden>
+        <div class="detail-page">
+          <h1 id="detail-title">Homestay Name</h1>
+          <p id="detail-meta" style="margin-bottom: 20px;">Location · Capacity</p>
+
+          <!-- Interactive multi-photo gallery -->
+          <div class="detail-gallery" style="margin-bottom: 30px;">
+            <!-- Primary enlarged photo display -->
+            <div style="height: 420px; width: 100%; border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+              <img id="main-photo" src="" alt="Main photo" style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.25s ease;">
+            </div>
+            <!-- Clickable image thumbnails container -->
+            <div id="detail-thumbnails" style="display: flex; gap: 12px; margin-top: 14px; overflow-x: auto; padding-bottom: 6px;"></div>
+          </div>
+
+          <!-- Space details and booking card layout -->
+          <div class="detail-layout">
+            <div>
+              <h2>About this space</h2>
+              <p id="detail-desc" style="margin: 15px 0 25px;"></p>
+              <h3>What this stay offers</h3>
+              <p id="detail-facilities" style="margin-top: 10px;"></p>
+            </div>
+
+            <!-- Booking panel with live price calculation -->
+            <aside class="reservation-panel">
+              <div class="reserve-price"><strong id="detail-price-text">RM 0.00</strong> <span>/ night</span></div>
+              <p id="detail-rate-note" class="daily-rate-note" aria-live="polite"></p>
+              <form id="book-form" style="margin-top: 20px;">
+                <input type="hidden" id="book-homestay-id">
+                <div class="two-fields">
+                  <label>Check-in<input type="date" id="cin" required></label>
+                  <label>Check-out<input type="date" id="cout" required></label>
+                </div>
+                <label>Guests<input type="number" id="book-guests" min="1" value="2" required></label>
+                <div style="border-top: 1px solid var(--line); margin: 18px 0; padding-top: 15px;">
+                  <label>Your Full Name<input type="text" id="book-cust-name" required></label>
+                  <label>Email Address<input type="email" id="book-cust-email" required></label>
+                  <label>Contact Number<input type="text" id="book-cust-contact" required></label>
+                </div>
+                <p id="live-price-details" aria-live="polite" style="font-size: 13px; margin: 12px 0;"></p>
+                <div class="price-line total">
+                  <span>Estimated Total:</span>
+                  <span id="live-total">--</span>
+                </div>
+                <button class="button" style="width: 100%; margin-top: 12px;" type="submit">Confirm & Book</button>
+              </form>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. CUSTOMER BOOKINGS VIEW: Logged-in customer reservation history -->
+      <section id="view-bookings" class="page-view" hidden>
+        <div class="bookings-page">
+          <h1>My Bookings</h1>
+          <p id="bookings-subtitle" style="margin-bottom: 25px;">Reservations made under your account</p>
+          <div id="customer-bookings-container"></div>
+        </div>
+      </section>
+
+      <!-- 5. MANAGER / ROOM OWNER WORKSPACE: Property management and reservations for owner's homestays -->
+      <section id="view-owner" class="page-view" hidden>
+        <div class="dashboard-shell">
+          <!-- Sidebar navigation -->
+          <aside class="sidebar">
+            <span class="eyebrow">Manager Portal</span>
+            <a id="owner-side-overview" href="#owner">Overview</a>
+            <a id="owner-side-stays" href="#owner-homestays">My Homestays (Edit)</a>
+            <a id="owner-side-bookings" href="#owner-bookings">Customer Bookings</a>
+          </aside>
+
+          <!-- Main workspace content -->
+          <div class="dashboard-main">
+            <h1 id="owner-welcome">Welcome, Owner</h1>
+            <p style="margin-bottom: 20px;">Manager & Room Owner Dashboard</p>
+
+            <!-- Metrics cards -->
+            <div class="stats-grid">
+              <div class="stat"><span>Managed Properties</span><strong id="owner-stat-properties">0</strong></div>
+              <div class="stat"><span>Customer Bookings</span><strong id="owner-stat-bookings">0</strong></div>
+              <div class="stat"><span>Total Revenue</span><strong id="owner-stat-revenue">RM 0.00</strong></div>
+            </div>
+
+            <!-- Managed listings section -->
+            <div id="owner-section-stays">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin: 30px 0 15px;">
+                <div>
+                  <h2>My Homestay Listings</h2>
+                  <p style="font-size: 13px;">Manage, edit pricing, capacity, and photos for your properties.</p>
+                </div>
+              </div>
+              <div id="owner-stays-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;"></div>
+            </div>
+
+            <!-- Customer reservations for owner's homestays -->
+            <div id="owner-section-bookings" style="display: none;">
+              <h2>Customer Reservations for My Stays</h2>
+              <p style="font-size: 13px; margin: 5px 0 15px;">Room Owner view showing all customer contact details.</p>
+              <div id="owner-bookings-container"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. ADMIN WORKSPACE: System-wide analytics, report exports, and user directories -->
+      <section id="view-admin" class="page-view" hidden>
+        <div class="dashboard-shell">
+          <!-- Sidebar navigation -->
+          <aside class="sidebar">
+            <span class="eyebrow">Admin Portal</span>
+            <a id="admin-side-analytics" href="#admin">Location Analytics & Reports</a>
+            <a id="admin-side-bookings" href="#admin-bookings">All Customer Bookings</a>
+            <a id="admin-side-users" href="#admin-users">All Users (Admin & Customer)</a>
+          </aside>
+
+          <!-- Admin main area -->
+          <div class="dashboard-main">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;">
+              <div>
+                <h1 id="admin-page-title">Location Analytics & Reports</h1>
+                <p style="font-size: 13px; margin-top: 5px;">Admin Control Center · Logged in as: <strong id="admin-logged-name">Admin</strong></p>
+              </div>
+              <!-- Action buttons for CSV download and Print/PDF -->
+              <div id="admin-report-actions" style="display: flex; gap: 10px;">
+                <button class="button secondary" style="min-height: 36px; padding: 6px 14px;" onclick="printLocationReport()">🖨️ Print / PDF</button>
+                <button class="button" style="min-height: 36px; padding: 6px 14px;" onclick="downloadLocationReportCSV()">📥 Download CSV Report</button>
+              </div>
+            </div>
+
+            <!-- Tab 1: Location Analytics Table -->
+            <div id="admin-section-analytics">
+              <div class="stats-grid">
+                <div class="stat"><span>Total Platform Bookings</span><strong id="admin-stat-bookings">0</strong></div>
+                <div class="stat"><span>Total Bookings Revenue</span><strong id="admin-stat-revenue">RM 0.00</strong></div>
+                <div class="stat"><span>Top Destination</span><strong id="admin-stat-toploc" style="color: var(--primary); font-size: 24px;">None</strong></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin: 30px 0 15px;">
+                <div>
+                  <h2>Bookings by Destination (Place)</h2>
+                  <p style="font-size: 13px;">Real-time booking volume and revenue generated per location.</p>
+                </div>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Destination (Place)</th>
+                      <th>Homestays Available</th>
+                      <th>Total Bookings</th>
+                      <th>Confirmed / Completed</th>
+                      <th>Pending / Cancelled</th>
+                      <th>Total Guests</th>
+                      <th>Total Revenue</th>
+                      <th>Booking Share</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-analytics-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Tab 2: All Bookings across platform -->
+            <div id="admin-section-bookings" style="display: none;">
+              <h2>All Platform Bookings</h2>
+              <p style="font-size: 13px; margin: 5px 0 15px;">Every booking made by customers across all homestays in Malaysia.</p>
+              <div id="admin-bookings-container"></div>
+            </div>
+
+            <!-- Tab 3: System Users table -->
+            <div id="admin-section-users" style="display: none;">
+              <h2>All Registered Users</h2>
+              <p style="font-size: 13px; margin: 5px 0 15px;">Admin view showing Admins, Room Owners, and Customers stored in MySQL.</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>User ID</th>
+                      <th>Full Name</th>
+                      <th>Email</th>
+                      <th>Contact</th>
+                      <th>Role</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-users-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. LOGIN / SWITCH ROLE VIEW: Testing and demonstration account selector -->
+      <section id="view-login" class="page-view" hidden>
+        <div style="max-width: 750px; margin: 50px auto; padding: 0 20px;">
+          <div style="border: 1px solid var(--line); border-radius: 10px; padding: 35px; width: 100%;">
+            <h2>Switch Account / Role</h2>
+            <p style="margin: 8px 0 20px; font-size: 13px;">Click any account below to test its role and permissions:</p>
+            <div id="login-accounts-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer id="footer">
+      <!-- Quick date-based price search tool -->
+      <section class="date-price-search" aria-labelledby="date-price-title">
+        <h2 id="date-price-title">Check prices by date</h2>
+        <p>Choose any day. Saturday and Sunday nights include a 10% surcharge.</p>
+        <form id="date-price-form" class="date-price-form">
+          <label for="price-search-date">Stay date
+            <input type="date" id="price-search-date" required aria-describedby="date-price-status">
+          </label>
+          <button class="button" type="submit">Search prices</button>
+        </form>
+        <!-- Quick date selection buttons -->
+        <div class="date-shortcuts" aria-label="Quick date choices">
+          <button type="button" class="button secondary" id="price-date-today">Today</button>
+          <button type="button" class="button secondary" data-price-weekday="6">Saturday</button>
+          <button type="button" class="button secondary" data-price-weekday="0">Sunday</button>
+        </div>
+        <p id="date-price-status" role="status" aria-live="polite"></p>
+      </section>
+      <div class="footer-main">
+        <div>
+          <strong style="font-size: 24px; color: var(--primary);">ruang.</strong>
+          <p>A place to stay. Connected to MySQL database.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Ruang · XAMPP MySQL Edition</span>
+      </div>
+    </footer>
+
+    <!-- ==========================================
+         MODAL DIALOG (OWNER HOMESTAY EDIT)
+         ========================================== -->
+    <dialog id="dialog" aria-modal="true" aria-label="Edit Homestay Dialog">
+      <div class="dialog-heading">
+        <h2>Edit Homestay Details</h2>
+        <button type="button" onclick="document.querySelector('#dialog').close()">✕</button>
+      </div>
+      <form id="editHomestayForm" style="max-height: 75vh; overflow-y: auto; padding-right: 5px;">
+        <input type="hidden" id="edit-stay-id">
+        <input type="hidden" id="edit-stay-owner">
+
+        <label>Homestay Name
+          <input type="text" id="edit-stay-name" required>
+        </label>
+
+        <div class="two-fields">
+          <label>Location (City)
+            <select id="edit-stay-location" required>
+              <option value="Melaka">Melaka</option>
+              <option value="Kuala Lumpur">Kuala Lumpur</option>
+              <option value="Penang">Penang</option>
+              <option value="Ipoh">Ipoh</option>
+              <option value="Johor Bahru">Johor Bahru</option>
+            </select>
+          </label>
+          <label>Property Category / Type
+            <input type="text" id="edit-stay-type" required>
+          </label>
+        </div>
+
+        <div class="two-fields">
+          <label>Price Per Night (RM)
+            <input type="number" step="0.01" min="1" id="edit-stay-price" required>
+          </label>
+          <label>Max Guest Capacity
+            <input type="number" min="1" id="edit-stay-capacity" required>
+          </label>
+        </div>
+
+        <label>Listing Status
+          <select id="edit-stay-status">
+            <option value="Active">Active (Visible for Booking)</option>
+            <option value="Inactive">Inactive (Hidden)</option>
+          </select>
+        </label>
+
+        <label>Facilities (comma separated)
+          <input type="text" id="edit-stay-facilities" required>
+        </label>
+
+        <label>Image Paths (one path per line)
+          <textarea id="edit-stay-images" rows="4" required></textarea>
+        </label>
+
+        <label>Description
+          <textarea id="edit-stay-desc" rows="3" required></textarea>
+        </label>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+          <button type="button" class="button secondary" onclick="document.querySelector('#dialog').close()">Cancel</button>
+          <button type="submit" class="button">Save Changes to Database</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Floating toast notification container -->
+    <div id="toast" role="status" aria-live="polite"></div>
+
+    <!-- Main frontend JavaScript entry point -->
+    <script src="app.js"></script>
+  </body>
+</html>
